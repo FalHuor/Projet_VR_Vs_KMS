@@ -4921,6 +4921,7 @@ GameObject:
   - component: {fileID: 7401425097688090092}
   - component: {fileID: 4720638999171532684}
   - component: {fileID: 878206350737495439}
+  - component: {fileID: 6006253544365579133}
   m_Layer: 0
   m_Name: Controller (right)
   m_TagString: Untagged
@@ -5047,6 +5048,21 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   hand: {fileID: 0}
+--- !u!114 &6006253544365579133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7431544729803274648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64e0e2e842865114997330ceacceec49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SelectedObject: {fileID: 0}
+  virus: {fileID: 7431544729803287272}
+  virusCamera: {fileID: 7431408942094787348}
 --- !u!1 &7431544729803286996
 GameObject:
   m_ObjectHideFlags: 0
@@ -5110,12 +5126,12 @@ GameObject:
   - component: {fileID: 7431544729813424298}
   - component: {fileID: 114629987131082800}
   - component: {fileID: 114806142856658662}
-  - component: {fileID: 1337280990529096637}
   - component: {fileID: 4154883878365247021}
   - component: {fileID: 8841185242452874435}
   - component: {fileID: 5704283507183438300}
+  - component: {fileID: 1029555210084398484}
   m_Layer: 0
-  m_Name: '[CameraRigMultiUser]'
+  m_Name: Virus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5253,31 +5269,6 @@ MonoBehaviour:
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 0
   m_UseLocal: 1
---- !u!114 &1337280990529096637
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7431544729803287272}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 202a6e24b48d1684398409c47161adcb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  trackingOriginTransform: {fileID: 0}
-  hmdTransforms: []
-  hands:
-  - {fileID: 4720638999171532684}
-  - {fileID: 8295731088105754030}
-  headCollider: {fileID: 0}
-  rigSteamVR: {fileID: 0}
-  rig2DFallback: {fileID: 0}
-  audioListener: {fileID: 0}
-  headsetOnHead:
-    actionPath: /actions/default/in/HeadsetOnHead
-    needsReinit: 0
-  allowToggleTo2D: 1
 --- !u!114 &4154883878365247021
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5330,6 +5321,31 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0.9, z: 0}
+--- !u!114 &1029555210084398484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7431544729803287272}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 202a6e24b48d1684398409c47161adcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trackingOriginTransform: {fileID: 0}
+  hmdTransforms: []
+  hands:
+  - {fileID: 4720638999171532684}
+  - {fileID: 8295731088105754030}
+  headCollider: {fileID: 0}
+  rigSteamVR: {fileID: 0}
+  rig2DFallback: {fileID: 0}
+  audioListener: {fileID: 0}
+  headsetOnHead:
+    actionPath: /actions/default/in/HeadsetOnHead
+    needsReinit: 0
+  allowToggleTo2D: 1
 --- !u!1 &7431544729803305918
 GameObject:
   m_ObjectHideFlags: 0
@@ -5342,6 +5358,7 @@ GameObject:
   - component: {fileID: 7401425096304958052}
   - component: {fileID: 8295731088105754030}
   - component: {fileID: 6732143549497140594}
+  - component: {fileID: 4854487226415202772}
   m_Layer: 0
   m_Name: Controller (left)
   m_TagString: Untagged
@@ -5468,6 +5485,21 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   hand: {fileID: 0}
+--- !u!114 &4854487226415202772
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7431544729803305918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64e0e2e842865114997330ceacceec49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SelectedObject: {fileID: 0}
+  virus: {fileID: 7431544729803287272}
+  virusCamera: {fileID: 7431408942094787348}
 --- !u!1001 &43279024606055786
 PrefabInstance:
   m_ObjectHideFlags: 0

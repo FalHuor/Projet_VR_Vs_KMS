@@ -1438,7 +1438,7 @@ GameObject:
   - component: {fileID: 434801000126074480}
   - component: {fileID: 6314186456467176691}
   m_Layer: 0
-  m_Name: ThirdPersonController
+  m_Name: Scientist
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

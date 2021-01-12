@@ -94,7 +94,7 @@ namespace vr_vs_kms
                 {
                     Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManagerHelper.ActiveSceneName);
                     // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
-                    Vector3 initialPos = UserDeviceManager.GetDeviceUsed() == UserDeviceType.OCULUS ? new Vector3(0f, 0f, 0f) : new Vector3(0f, 5f, 0f);
+                    Vector3 initialPos = UserDeviceManager.GetDeviceUsed() == UserDeviceType.OCULUS ? new Vector3(0f, 0f, 0f) : new Vector3(0f, 0f, 0f);
                     PhotonNetwork.Instantiate("Prefabs/" + playerPrefab.name, initialPos, Quaternion.identity, 0);
                 }
                 else
