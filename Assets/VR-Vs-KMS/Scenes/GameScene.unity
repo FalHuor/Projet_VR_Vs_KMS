@@ -3317,6 +3317,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpawnArea (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 4772955901445691050, guid: a8ee511281b67a1448c9fb76e29d1577,
+        type: 3}
+      propertyPath: m_TagString
+      value: Respawn
+      objectReference: {fileID: 0}
     - target: {fileID: 4772955901445691054, guid: a8ee511281b67a1448c9fb76e29d1577,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5467,6 +5472,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SpawnArea (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4772955901445691050, guid: a8ee511281b67a1448c9fb76e29d1577,
+        type: 3}
+      propertyPath: m_TagString
+      value: Respawn
       objectReference: {fileID: 0}
     - target: {fileID: 4772955901445691054, guid: a8ee511281b67a1448c9fb76e29d1577,
         type: 3}
@@ -8645,6 +8655,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpawnArea (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 4772955901445691050, guid: a8ee511281b67a1448c9fb76e29d1577,
+        type: 3}
+      propertyPath: m_TagString
+      value: Respawn
+      objectReference: {fileID: 0}
     - target: {fileID: 4772955901445691054, guid: a8ee511281b67a1448c9fb76e29d1577,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -9094,6 +9109,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SpawnArea (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4772955901445691050, guid: a8ee511281b67a1448c9fb76e29d1577,
+        type: 3}
+      propertyPath: m_TagString
+      value: Respawn
       objectReference: {fileID: 0}
     - target: {fileID: 4772955901445691054, guid: a8ee511281b67a1448c9fb76e29d1577,
         type: 3}
@@ -9768,6 +9788,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SpawnArea
+      objectReference: {fileID: 0}
+    - target: {fileID: 4772955901445691050, guid: a8ee511281b67a1448c9fb76e29d1577,
+        type: 3}
+      propertyPath: m_TagString
+      value: Respawn
       objectReference: {fileID: 0}
     - target: {fileID: 4772955901445691054, guid: a8ee511281b67a1448c9fb76e29d1577,
         type: 3}

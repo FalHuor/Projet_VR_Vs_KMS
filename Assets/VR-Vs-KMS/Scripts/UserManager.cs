@@ -43,6 +43,9 @@ namespace vr_vs_kms
         [Range(0.2f, 100.0f)] public float MaxSpeedForPressDuration;
         private float pressDuration = 0;
 
+        private List<GameObject> spawnPoints = new List<GameObject>();
+        private bool canShoot = true;
+
         private List<SteamVR_Input_Sources> inputSources = new List<SteamVR_Input_Sources>();
 
         #endregion
@@ -60,12 +63,14 @@ namespace vr_vs_kms
         // Start is called before the first frame update
         void Start()
         {
+            Debug.Log("Delay SHoot : " +AppConfig.Inst.DelayShoot);
             Debug.Log("isLocalPlayer:" + photonView.IsMine);
-            Health = 3;
+            Health = AppConfig.Inst.LifeNumber;
             updateGoFreeLookCameraRig();
             followLocalPlayer();
             activateLocalPlayer();
-            UpdateHealthMaterial();
+            spawnPoints.AddRange(GameObject.FindGameObjectsWithTag("Respawn"));
+            //UpdateHealthMaterial();
             if(UserDeviceManager.GetDeviceUsed().Equals(UserDeviceType.OCULUS))
             {
                 foreach(SteamVR_Behaviour_Pose pose in GetComponentsInChildren<SteamVR_Behaviour_Pose>())
@@ -141,20 +146,31 @@ namespace vr_vs_kms
             // Don't do anything if we are not the UserMe isLocalPlayer
             if (!photonView.IsMine) return;
 
-            if (Input.GetButtonDown("Fire1") || inputSources.Exists(elt =>SteamVR_Actions._default.Fire.GetStateDown(elt))) {
-                // Start Loading time when fire is pressed
-                pressDuration = 0.0f;
-            } else if (Input.GetButton("Fire1") || inputSources.Exists(elt => SteamVR_Actions._default.Fire.GetState(elt))) {
-                // count the time the Fire1 is pressed
-                //pressDuration += ???; 
-                pressDuration += Time.deltaTime;
-            } else if (Input.GetButtonUp("Fire1") || inputSources.Exists(elt => SteamVR_Actions._default.Fire.GetStateUp(elt))) {
-                // When releasing Fire1, spawn the ball
-                // Define the initial speed of the Snowball between MinSpeed and MaxSpeed according to the duration the button is pressed
-                var speed = Mathf.Clamp(MinSpeed + pressDuration / MaxSpeedForPressDuration * (MaxSpeed - MinSpeed), MinSpeed, MaxSpeed); // update with the right value
-                Debug.Log(string.Format("time {0:F2} <  {1} => speed {2} < {3} < {4}", pressDuration, MaxSpeedForPressDuration, MinSpeed, speed, MaxSpeed));
-                photonView.RPC("ThrowCharge", RpcTarget.AllViaServer, ChargeSpawner.position, speed * ChargeSpawner.forward);
+            if(canShoot)
+            {
+                if (Input.GetButtonDown("Fire1") || inputSources.Exists(elt => SteamVR_Actions._default.Fire.GetStateDown(elt)))
+                {
+                    // Start Loading time when fire is pressed
+                    pressDuration = 0.0f;
+                }
+                else if (Input.GetButton("Fire1") || inputSources.Exists(elt => SteamVR_Actions._default.Fire.GetState(elt)))
+                {
+                    // count the time the Fire1 is pressed
+                    //pressDuration += ???; 
+                    pressDuration += Time.deltaTime;
+                }
+                else if (Input.GetButtonUp("Fire1") || inputSources.Exists(elt => SteamVR_Actions._default.Fire.GetStateUp(elt)))
+                {
+                    // When releasing Fire1, spawn the ball
+                    // Define the initial speed of the Snowball between MinSpeed and MaxSpeed according to the duration the button is pressed
+                    var speed = Mathf.Clamp(MinSpeed + pressDuration / MaxSpeedForPressDuration * (MaxSpeed - MinSpeed), MinSpeed, MaxSpeed); // update with the right value
+                    Debug.Log(string.Format("time {0:F2} <  {1} => speed {2} < {3} < {4}", pressDuration, MaxSpeedForPressDuration, MinSpeed, speed, MaxSpeed));
+                    photonView.RPC("ThrowCharge", RpcTarget.AllViaServer, ChargeSpawner.position, speed * ChargeSpawner.forward);
+                    canShoot = false;
+                    StartCoroutine(ShootDelay());
+                }
             }
+            
         }
 
         [PunRPC]
@@ -192,22 +208,31 @@ namespace vr_vs_kms
         /// </summary>
         [SerializeField] float ForceHit;
 
-        public void HitBySnowball()
+        public void HitBySnowball(string tag)
         {
-            if (!photonView.IsMine) return;
-            Debug.Log("Got me");
-            var rb = GetComponent<Rigidbody>();
-            rb.AddForce((-transform.forward + (transform.up * 0.1f) ) * ForceHit, ForceMode.Impulse);
+            if (!photonView.IsMine) return;   
 
-
-            // Manage to leave room as UserMe
-            if (--Health <= 0)
+            if(gameObject.CompareTag("Virus") && tag.Equals("Antiviral"))
             {
-                PhotonNetwork.LeaveRoom();
+                --Health;
+                Debug.Log("Virus Health : " + Health);
+            } else if (gameObject.CompareTag("Scientist") && tag.Equals("Viral")) {
+                --Health;
+                Debug.Log("Scientist Health : " + Health);
+            }
+            // Manage to leave room as UserMe
+            if (Health <= 0)
+            {
+                //PhotonNetwork.LeaveRoom();
+                Health = AppConfig.Inst.LifeNumber;
+                GameObject spawnPoint;
+                int spawnIndex = Random.Range(0, spawnPoints.Count);
+                spawnPoint = spawnPoints[spawnIndex];
+                gameObject.transform.position = spawnPoint.transform.position;
             }
         }
 
-        public void UpdateHealthMaterial()
+        /*public void UpdateHealthMaterial()
         {
             try
             {
@@ -232,7 +257,7 @@ namespace vr_vs_kms
             {
 
             }
-        }
+        }*/
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
@@ -245,10 +270,16 @@ namespace vr_vs_kms
                 Health = (int)stream.ReceiveNext();
             }
 
-            if(previousHealth != Health) UpdateHealthMaterial();
+            //if(previousHealth != Health) UpdateHealthMaterial();
             previousHealth = Health;
         }
 
         #endregion
+
+        IEnumerator ShootDelay()
+        {
+            yield return new WaitForSeconds(AppConfig.Inst.DelayShoot);
+            canShoot = true;
+        }
     }
 }
