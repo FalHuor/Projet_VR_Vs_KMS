@@ -7,10 +7,10 @@ public class AppConfig {
     // HTC, force the device to HTC, PC, force device to PC Keyboard, AUTO: select the device according to the hardware connected.
     public string DeviceUsed = "AUTO";
     public int LifeNumber = 10; 
-    public double DelayShoot = 1.5; 
+    public float DelayShoot = 1.5f; 
     public int DelayTeleport = 5; 
-    public string ColorShotKMS = "Green"; 
-    public string ColorShotVirus = "Red"; 
+    public Color ColorShotKMS = Color.green; 
+    public Color ColorShotVirus = Color.red; 
     public int NbContaminatedPlayerToVictory = 10; 
     public int RadiusExplosion = 3; 
     public int TimeToAreaContamination = 4; 

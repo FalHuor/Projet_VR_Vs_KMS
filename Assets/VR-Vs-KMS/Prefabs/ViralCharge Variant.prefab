@@ -65,7 +65,17 @@ PrefabInstance:
     - target: {fileID: 8311674411183255996, guid: 3ba24568c0fbc6141966aa54c62af2e3,
         type: 3}
       propertyPath: m_Name
-      value: AntiviralCharge
+      value: ViralCharge Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 8311674411183255996, guid: 3ba24568c0fbc6141966aa54c62af2e3,
+        type: 3}
+      propertyPath: m_TagString
+      value: Viral
+      objectReference: {fileID: 0}
+    - target: {fileID: 8311674411183255996, guid: 3ba24568c0fbc6141966aa54c62af2e3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ba24568c0fbc6141966aa54c62af2e3, type: 3}
