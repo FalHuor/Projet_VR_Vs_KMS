@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.Cameras;
 using UnityStandardAssets.Characters.ThirdPerson;
+using Valve.VR;
 
 namespace vr_vs_kms
 {
@@ -28,11 +29,11 @@ namespace vr_vs_kms
         /// <summary>
         /// The Transform from which the snow ball is spawned
         /// </summary>
-        [SerializeField] Transform snowballSpawner;
+        [SerializeField] Transform ChargeSpawner;
         /// <summary>
         /// The prefab to create when spawning
         /// </summary>
-        [SerializeField] GameObject SnowballPrefab;
+        [SerializeField] GameObject ChargePrefab;
 
 
 
@@ -41,6 +42,8 @@ namespace vr_vs_kms
         [Range(0.2f, 100.0f)] public float MaxSpeed;
         [Range(0.2f, 100.0f)] public float MaxSpeedForPressDuration;
         private float pressDuration = 0;
+
+        private List<SteamVR_Input_Sources> inputSources = new List<SteamVR_Input_Sources>();
 
         #endregion
 
@@ -63,6 +66,13 @@ namespace vr_vs_kms
             followLocalPlayer();
             activateLocalPlayer();
             UpdateHealthMaterial();
+            if(UserDeviceManager.GetDeviceUsed().Equals(UserDeviceType.OCULUS))
+            {
+                foreach(SteamVR_Behaviour_Pose pose in GetComponentsInChildren<SteamVR_Behaviour_Pose>())
+                {
+                    inputSources.Add(pose.inputSource);
+                }
+            }
         }
 
                 /// <summary>
@@ -104,20 +114,23 @@ namespace vr_vs_kms
         {
             // enable the ThirdPersonUserControl if it is a Loacl player = UserMe
             // disable the ThirdPersonUserControl if it is not a Loacl player = UserOther
-            GetComponent<ThirdPersonUserControl>().enabled = photonView.IsMine;
-            GetComponent<Rigidbody>().isKinematic = !photonView.IsMine;
-            if (photonView.IsMine)
+            if(UserDeviceManager.GetDeviceUsed().Equals(UserDeviceType.PC))
             {
-                try
+                GetComponent<ThirdPersonUserControl>().enabled = photonView.IsMine;
+                GetComponent<Rigidbody>().isKinematic = !photonView.IsMine;
+                if (photonView.IsMine)
                 {
-                    // Change the material of the Ethan Glasses
-                    GameObjectLocalPlayerColor.GetComponent<Renderer>().material = PlayerLocalMat;
-                }
-                catch (System.Exception)
-                {
+                    try
+                    {
+                        // Change the material of the Ethan Glasses
+                        GameObjectLocalPlayerColor.GetComponent<Renderer>().material = PlayerLocalMat;
+                    }
+                    catch (System.Exception)
+                    {
 
+                    }
                 }
-            }
+            }            
         }
 
 
@@ -128,48 +141,42 @@ namespace vr_vs_kms
             // Don't do anything if we are not the UserMe isLocalPlayer
             if (!photonView.IsMine) return;
 
-            if (Input.GetButtonDown("Fire1"))
-            {
+            if (Input.GetButtonDown("Fire1") || inputSources.Exists(elt =>SteamVR_Actions._default.Fire.GetStateDown(elt))) {
                 // Start Loading time when fire is pressed
                 pressDuration = 0.0f;
-            }
-            else if (Input.GetButton("Fire1"))
-            {
+            } else if (Input.GetButton("Fire1") || inputSources.Exists(elt => SteamVR_Actions._default.Fire.GetState(elt))) {
                 // count the time the Fire1 is pressed
                 //pressDuration += ???; 
                 pressDuration += Time.deltaTime;
-            }
-
-            else if (Input.GetButtonUp("Fire1"))
-            {
+            } else if (Input.GetButtonUp("Fire1") || inputSources.Exists(elt => SteamVR_Actions._default.Fire.GetStateUp(elt))) {
                 // When releasing Fire1, spawn the ball
                 // Define the initial speed of the Snowball between MinSpeed and MaxSpeed according to the duration the button is pressed
                 var speed = Mathf.Clamp(MinSpeed + pressDuration / MaxSpeedForPressDuration * (MaxSpeed - MinSpeed), MinSpeed, MaxSpeed); // update with the right value
                 Debug.Log(string.Format("time {0:F2} <  {1} => speed {2} < {3} < {4}", pressDuration, MaxSpeedForPressDuration, MinSpeed, speed, MaxSpeed));
-                photonView.RPC("ThrowBall", RpcTarget.AllViaServer, snowballSpawner.position, speed * snowballSpawner.forward);
+                photonView.RPC("ThrowCharge", RpcTarget.AllViaServer, ChargeSpawner.position, speed * ChargeSpawner.forward);
             }
         }
 
         [PunRPC]
-        void ThrowBall(Vector3 position, Vector3 directionAndSpeed, PhotonMessageInfo info)
+        void ThrowCharge(Vector3 position, Vector3 directionAndSpeed, PhotonMessageInfo info)
         {
             // Tips for Photon lag compensation. Il faut compenser le temps de lag pour l'envoi du message.
             // donc décaler la position de départ de la balle dans la direction
             float lag = (float)(PhotonNetwork.Time - info.SentServerTime);
-            Debug.LogFormat("PunRPC: ThrowBall {0} -> {1} lag:{2}", position, directionAndSpeed, lag);
+            Debug.LogFormat("PunRPC: ThrowCharge {0} -> {1} lag:{2}", position, directionAndSpeed, lag);
 
             // Create the Snowball from the Snowball Prefab
-            GameObject snowball = Instantiate(
-                SnowballPrefab,
+            GameObject charge = Instantiate(
+                ChargePrefab,
                 position + directionAndSpeed * Mathf.Clamp(lag, 0, 1.0f),
                 Quaternion.identity);
 
 
             // Add velocity to the Snowball
-            snowball.GetComponent<Rigidbody>().velocity = directionAndSpeed;
+            charge.GetComponent<Rigidbody>().velocity = directionAndSpeed;
 
             // Destroy the Snowball after 5 seconds
-            Destroy(snowball, 5.0f);
+            Destroy(charge, 5.0f);
         }
         #endregion
 

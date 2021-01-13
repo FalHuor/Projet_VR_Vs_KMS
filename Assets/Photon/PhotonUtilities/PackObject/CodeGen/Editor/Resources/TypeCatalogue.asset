@@ -21,3 +21,8 @@ MonoBehaviour:
       codegenFileWriteTime: 637461284557524705
       localFieldCount: 2
       totalFieldCount: 2
+    - hashcode: 1161234830446200393
+      filepath: Assets/Photon/PhotonUtilities\PackObject\_GeneratedPackExtensions\Pack_TestPackObject.cs
+      codegenFileWriteTime: 637460480547429352
+      localFieldCount: 2
+      totalFieldCount: 2
