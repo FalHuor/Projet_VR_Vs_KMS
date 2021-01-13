@@ -4774,6 +4774,7 @@ GameObject:
   - component: {fileID: 2112096271937188681}
   - component: {fileID: 1648456427}
   - component: {fileID: 1771731353998056768}
+  - component: {fileID: 2723925043354924315}
   m_Layer: 0
   m_Name: ContaminationArea
   m_TagString: Untagged
@@ -4833,3 +4834,15 @@ MonoBehaviour:
     secondColor: {r: 0.31102926, g: 1, b: 0.475, a: 0.95686275}
   cullRadius: 5
   inTimer: 0
+--- !u!114 &2723925043354924315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2112096271937188694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeaa6a00280321142b296d2c9141e38a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
