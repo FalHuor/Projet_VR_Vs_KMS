@@ -29,6 +29,14 @@ namespace vr_vs_kms
         public float inTimer = 0f;
         private CullingGroup cullGroup;
 
+
+        private List<GameObject> listPlayerInZone = new List<GameObject>();
+        private bool canCaptured = true;
+        private bool isOnCaptured = false;
+        private string onCaptureBy;
+        private string capturedBy;
+
+
         void Start()
         {
             populateParticleSystemCache();
@@ -69,7 +77,40 @@ namespace vr_vs_kms
             }
         }
 
-        void OnTriggerExit(Collider coll)
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Virus") || other.CompareTag("Scientist"))
+            {
+                listPlayerInZone.Add(other.gameObject);
+                if (listPlayerInZone.Count > 1)
+                {
+                    foreach (GameObject player in listPlayerInZone)
+                    {
+                        if (player.CompareTag(listPlayerInZone[0].tag))
+                        {
+
+                        }
+                    }
+                } 
+                else
+                {
+                    canCaptured = true;
+                }
+
+            }
+        }
+
+        void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Virus") || other.CompareTag("Scientist"))
+            {
+                listPlayerInZone.Remove(other.gameObject);
+
+
+            }
+        }
+
+        private void OnTriggerStay(Collider other)
         {
             
         }
@@ -81,8 +122,8 @@ namespace vr_vs_kms
 
         private void ColorParticle(ParticleSystem pSys, Color mainColor, Color accentColor)
         {
-            // TODO: Solution to color particle 
-            
+            var myParticle = pSys.main;
+            myParticle.startColor = new ParticleSystem.MinMaxGradient(mainColor, accentColor);
         }
 
         public void BelongsToNobody()
