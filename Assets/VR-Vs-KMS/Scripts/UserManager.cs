@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityStandardAssets.Cameras;
 using UnityStandardAssets.Characters.ThirdPerson;
 using Valve.VR;
@@ -10,6 +11,9 @@ namespace vr_vs_kms
 {
     public class UserManager : MonoBehaviourPunCallbacks, IPunObservable
     {
+
+        public UnityEvent DeathEvent;
+
         public static GameObject UserMeInstance;
 
         public Material PlayerLocalMat;
@@ -229,6 +233,7 @@ namespace vr_vs_kms
                 int spawnIndex = Random.Range(0, spawnPoints.Count);
                 spawnPoint = spawnPoints[spawnIndex];
                 gameObject.transform.position = spawnPoint.transform.position;
+                DeathEvent.Invoke();
             }
         }
 
