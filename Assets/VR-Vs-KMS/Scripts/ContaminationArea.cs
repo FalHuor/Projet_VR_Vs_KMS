@@ -34,7 +34,9 @@ namespace vr_vs_kms
         private bool canCaptured = true;
         private bool isOnCaptured = false;
         private string onCaptureBy;
-        private string capturedBy;
+        public string CapturedBy;
+
+        private EndGameManager endGameManagerScript;
 
         private IEnumerator coroutineCaptureZone;
 
@@ -45,6 +47,7 @@ namespace vr_vs_kms
             setupCullingGroup();
 
             BelongsToNobody();
+            endGameManagerScript = GameObject.Find("EndGameManager").GetComponent<EndGameManager>();
         }
 
         private void populateParticleSystemCache()
@@ -184,15 +187,17 @@ namespace vr_vs_kms
             switch (onCaptureBy)
             {
                 case "Virus":
-                    capturedBy = onCaptureBy;
+                    CapturedBy = onCaptureBy;
                     BelongsToVirus();
+                    endGameManagerScript.checkContaminationArea();
                     break;
                 case "Scientist":
-                    capturedBy = onCaptureBy;
+                    CapturedBy = onCaptureBy;
                     BelongsToScientists();
+                    endGameManagerScript.checkContaminationArea();
                     break;
                 default:
-                    capturedBy = "";
+                    CapturedBy = "";
                     BelongsToNobody();
                     break;
             }
