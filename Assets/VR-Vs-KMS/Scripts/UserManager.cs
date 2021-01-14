@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityStandardAssets.Cameras;
 using UnityStandardAssets.Characters.ThirdPerson;
 using Valve.VR;
@@ -71,12 +72,19 @@ namespace vr_vs_kms
             activateLocalPlayer();
             spawnPoints.AddRange(GameObject.FindGameObjectsWithTag("Respawn"));
             //UpdateHealthMaterial();
-            if(UserDeviceManager.GetDeviceUsed().Equals(UserDeviceType.OCULUS))
+            if(gameObject.CompareTag("Virus"))
             {
-                foreach(SteamVR_Behaviour_Pose pose in GetComponentsInChildren<SteamVR_Behaviour_Pose>())
+                healthBar = gameObject.GetComponentInChildren<HealthBarBehaviour>();
+                healthBar.Player = gameObject.GetComponent<UserManager>();
+                foreach (SteamVR_Behaviour_Pose pose in GetComponentsInChildren<SteamVR_Behaviour_Pose>())
                 {
                     inputSources.Add(pose.inputSource);
                 }
+            } else if (gameObject.CompareTag("Scientist"))
+            {
+                healthBar = GameObject.Find("HealthBar").GetComponentInChildren<HealthBarBehaviour>();
+                healthBar.Player = gameObject.GetComponent<UserManager>();
+                healthBar.UpdateHealth();
             }
         }
 
@@ -146,6 +154,11 @@ namespace vr_vs_kms
             // Don't do anything if we are not the UserMe isLocalPlayer
             if (!photonView.IsMine) return;
 
+            /*if(Input.GetButtonDown("Jump") || inputSources.Exists(elt => SteamVR_Actions._default.Fire.GetStateDown(elt)))
+            {
+                HitBySnowball("Antiviral");
+            }*/
+
             if(canShoot)
             {
                 if (Input.GetButtonDown("Fire1") || inputSources.Exists(elt => SteamVR_Actions._default.Fire.GetStateDown(elt)))
@@ -203,6 +216,7 @@ namespace vr_vs_kms
 
         private int previousHealth;
         public int Health { get; private set; }
+        private HealthBarBehaviour healthBar;
         /// <summary>
         /// The Transform from which the snow ball is spawned
         /// </summary>
@@ -210,15 +224,18 @@ namespace vr_vs_kms
 
         public void HitBySnowball(string tag)
         {
-            if (!photonView.IsMine) return;   
-
+            Debug.Log("Photon View : " + photonView.IsMine);
+            if (!photonView.IsMine) return;
+            Debug.Log("Tag du hit : " + gameObject.tag);
             if(gameObject.CompareTag("Virus") && tag.Equals("Antiviral"))
             {
                 --Health;
+                healthBar.UpdateHealth();
                 Debug.Log("Virus Health : " + Health);
             } else if (gameObject.CompareTag("Scientist") && tag.Equals("Viral")) {
                 --Health;
                 Debug.Log("Scientist Health : " + Health);
+                healthBar.UpdateHealth();
             }
             // Manage to leave room as UserMe
             if (Health <= 0)
@@ -229,6 +246,7 @@ namespace vr_vs_kms
                 int spawnIndex = Random.Range(0, spawnPoints.Count);
                 spawnPoint = spawnPoints[spawnIndex];
                 gameObject.transform.position = spawnPoint.transform.position;
+                healthBar.UpdateHealth();
             }
         }
 

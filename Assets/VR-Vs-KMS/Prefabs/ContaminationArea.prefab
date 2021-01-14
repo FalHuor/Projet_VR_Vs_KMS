@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2112096270440660665}
   - component: {fileID: 2112096270440660667}
   - component: {fileID: 2112096270440660664}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Particle System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4775,7 +4775,7 @@ GameObject:
   - component: {fileID: 1648456427}
   - component: {fileID: 1771731353998056768}
   - component: {fileID: 2723925043354924315}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ContaminationArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
