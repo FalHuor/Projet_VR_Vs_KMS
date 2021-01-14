@@ -11,6 +11,9 @@ namespace vr_vs_kms
 {
     public class UserManager : MonoBehaviourPunCallbacks, IPunObservable
     {
+
+        public UnityEvent DeathEvent;
+
         public static GameObject UserMeInstance;
 
         public Material PlayerLocalMat;
@@ -247,6 +250,7 @@ namespace vr_vs_kms
                 spawnPoint = spawnPoints[spawnIndex];
                 gameObject.transform.position = spawnPoint.transform.position;
                 healthBar.UpdateHealth();
+                DeathEvent.Invoke();
             }
         }
 
