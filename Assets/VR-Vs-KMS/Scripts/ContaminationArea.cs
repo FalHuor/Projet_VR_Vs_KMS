@@ -104,7 +104,8 @@ namespace vr_vs_kms
             } 
             else
             {
-                StopCoroutine(coroutineCaptureZone);
+                if(coroutineCaptureZone != null)
+                    StopCoroutine(coroutineCaptureZone);
                 canCaptured = false;
                 isOnCaptured = false;
                 onCaptureBy = "";
