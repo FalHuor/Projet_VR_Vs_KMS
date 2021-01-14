@@ -29,6 +29,16 @@ namespace vr_vs_kms
         public float inTimer = 0f;
         private CullingGroup cullGroup;
 
+
+        private List<GameObject> listPlayerInZone = new List<GameObject>();
+        private bool canCaptured = true;
+        private bool isOnCaptured = false;
+        private string onCaptureBy;
+        private string capturedBy;
+
+        private IEnumerator coroutineCaptureZone;
+
+
         void Start()
         {
             populateParticleSystemCache();
@@ -58,7 +68,7 @@ namespace vr_vs_kms
 
         void OnStateChanged(CullingGroupEvent cullEvent)
         {
-            Debug.Log($"cullEvent {cullEvent.isVisible}");
+            //Debug.Log($"cullEvent {cullEvent.isVisible}");
             if (cullEvent.isVisible)
             {
                 pSystem.Play(true);
@@ -69,9 +79,64 @@ namespace vr_vs_kms
             }
         }
 
-        void OnTriggerExit(Collider coll)
+        private void CheckPlayerOnZone()
         {
-            
+            if (listPlayerInZone.Count > 1)
+            {
+                foreach (GameObject player in listPlayerInZone)
+                {
+                    if (player.CompareTag(listPlayerInZone[0].tag))
+                    {
+                        StopCoroutine(coroutineCaptureZone);
+                        canCaptured = false;
+                        isOnCaptured = false;
+                        onCaptureBy = "";
+                    }
+                }
+            }
+            else if (listPlayerInZone.Count == 1)
+            {
+                canCaptured = true;
+                isOnCaptured = true;
+                onCaptureBy = listPlayerInZone[0].tag;
+                coroutineCaptureZone = CaptureAreaProgress();
+                StartCoroutine(coroutineCaptureZone);
+            } 
+            else
+            {
+                StopCoroutine(coroutineCaptureZone);
+                canCaptured = false;
+                isOnCaptured = false;
+                onCaptureBy = "";
+            }
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("Virus") || other.CompareTag("Scientist"))
+            {
+                listPlayerInZone.Add(other.gameObject);
+                CheckPlayerOnZone();
+            }
+        }
+
+        private void OnTriggerStay(Collider other)
+        {
+
+        }
+
+        void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("Virus") || other.CompareTag("Scientist"))
+            {
+                RemovePlayer(other.gameObject);
+            }
+        }
+
+        public void RemovePlayer(GameObject playerGo)
+        {
+            listPlayerInZone.Remove(playerGo);
+            CheckPlayerOnZone();
         }
 
         void Update()
@@ -81,8 +146,8 @@ namespace vr_vs_kms
 
         private void ColorParticle(ParticleSystem pSys, Color mainColor, Color accentColor)
         {
-            // TODO: Solution to color particle 
-            
+            var myParticle = pSys.main;
+            myParticle.startColor = new ParticleSystem.MinMaxGradient(mainColor, accentColor);
         }
 
         public void BelongsToNobody()
@@ -110,6 +175,26 @@ namespace vr_vs_kms
         {
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(transform.position, cullRadius);
+        }
+
+        IEnumerator CaptureAreaProgress()
+        {
+            yield return new WaitForSeconds(AppConfig.Inst.TimeToAreaContamination);
+            switch (onCaptureBy)
+            {
+                case "Virus":
+                    capturedBy = onCaptureBy;
+                    BelongsToVirus();
+                    break;
+                case "Scientist":
+                    capturedBy = onCaptureBy;
+                    BelongsToScientists();
+                    break;
+                default:
+                    capturedBy = "";
+                    BelongsToNobody();
+                    break;
+            }
         }
     }
 }

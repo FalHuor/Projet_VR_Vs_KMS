@@ -3,12 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - Bullet
-  - Viral
-  - Antiviral
-  - Virus
-  - Scientist
+  tags: [Bullet, Viral, Antiviral, Virus, Scientist, projectile, FxTemporaire, Bullet,
+    Fire, Virus, Scientist]
   layers:
   - Default
   - TransparentFX
