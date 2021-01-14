@@ -27,6 +27,7 @@ namespace vr_vs_kms
         /// </summary>
         GameObject goFreeLookCameraRig = null;
 
+        AudioSource[] audioSources;
         
 
         #region Snwoball Spawn
@@ -67,6 +68,7 @@ namespace vr_vs_kms
         // Start is called before the first frame update
         void Start()
         {
+            audioSources = gameObject.GetComponents<AudioSource>();
             Debug.Log("Delay SHoot : " +AppConfig.Inst.DelayShoot);
             Debug.Log("isLocalPlayer:" + photonView.IsMine);
             Health = AppConfig.Inst.LifeNumber;
@@ -74,6 +76,7 @@ namespace vr_vs_kms
             followLocalPlayer();
             activateLocalPlayer();
             spawnPoints.AddRange(GameObject.FindGameObjectsWithTag("Respawn"));
+            audioSources[2].Play();
             //UpdateHealthMaterial();
             if(gameObject.CompareTag("Virus"))
             {
@@ -157,10 +160,10 @@ namespace vr_vs_kms
             // Don't do anything if we are not the UserMe isLocalPlayer
             if (!photonView.IsMine) return;
 
-            /*if(Input.GetButtonDown("Jump") || inputSources.Exists(elt => SteamVR_Actions._default.Fire.GetStateDown(elt)))
+            if(Input.GetButtonDown("Jump") || inputSources.Exists(elt => SteamVR_Actions._default.Fire.GetStateDown(elt)))
             {
-                HitBySnowball("Antiviral");
-            }*/
+                HitBySnowball("Viral");
+            }
 
             if(canShoot)
             {
@@ -202,7 +205,7 @@ namespace vr_vs_kms
                 ChargePrefab,
                 position + directionAndSpeed * Mathf.Clamp(lag, 0, 1.0f),
                 Quaternion.identity);
-
+            audioSources[3].Play();
 
             // Add velocity to the Snowball
             charge.GetComponent<Rigidbody>().velocity = directionAndSpeed;
@@ -234,23 +237,26 @@ namespace vr_vs_kms
             {
                 --Health;
                 healthBar.UpdateHealth();
+                audioSources[1].Play();
                 Debug.Log("Virus Health : " + Health);
             } else if (gameObject.CompareTag("Scientist") && tag.Equals("Viral")) {
-                --Health;
-                Debug.Log("Scientist Health : " + Health);
+                --Health;                
                 healthBar.UpdateHealth();
+                audioSources[1].Play();
+                Debug.Log("Scientist Health : " + Health);
             }
             // Manage to leave room as UserMe
             if (Health <= 0)
             {
                 //PhotonNetwork.LeaveRoom();
+                audioSources[0].Play();
                 Health = AppConfig.Inst.LifeNumber;
                 GameObject spawnPoint;
                 int spawnIndex = Random.Range(0, spawnPoints.Count);
                 spawnPoint = spawnPoints[spawnIndex];
                 gameObject.transform.position = spawnPoint.transform.position;
                 healthBar.UpdateHealth();
-                DeathEvent.Invoke();
+                DeathEvent.Invoke();                
             }
         }
 
