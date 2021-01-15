@@ -56,11 +56,11 @@ public class ControllerInput : MonoBehaviour
         {
             virusCamera.transform.position = controllerPointer.TargetPosition;
             virus.transform.position = controllerPointer.TargetPosition;
+            canTeleport = false;
+            StartCoroutine(TeleportDelay());
         }
         controllerPointer.DesactivatePointer();
-        Destroy(controllerPointer);
-        canTeleport = false;
-        StartCoroutine(TeleportDelay());
+        Destroy(controllerPointer);        
     }
 
     IEnumerator TeleportDelay()
