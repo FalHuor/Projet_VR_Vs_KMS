@@ -3837,6 +3837,8 @@ MonoBehaviour:
   BackGroundImage: {fileID: 2077147455}
   EndGameImage: {fileID: 1330449266}
   CanvasEndGame: {fileID: 1452362286}
+  VrPlayer: {fileID: 7431544729803287272, guid: d3475182c64941442a01f507039d5efb,
+    type: 3}
   EndGameImageVictory: {fileID: 21300000, guid: 7cc2e6f82bc21a047862d97a481294a8,
     type: 3}
   EndGameImageDefeat: {fileID: 21300000, guid: 00c075296bc5fae4598bc03e6b8b97f6, type: 3}

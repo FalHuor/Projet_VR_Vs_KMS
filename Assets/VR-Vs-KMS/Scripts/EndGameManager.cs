@@ -21,6 +21,8 @@ public class EndGameManager : MonoBehaviour
     public Image EndGameImage;
     public GameObject CanvasEndGame;
 
+    public GameObject VrPlayer;
+
     public Sprite EndGameImageVictory;
     public Sprite EndGameImageDefeat;
 
@@ -43,6 +45,7 @@ public class EndGameManager : MonoBehaviour
         ScoreVirusTeam = 0;
         ScoreScientistTeam = 0;
         Debug.Log("Color : " + victoryColor);
+
     }
 
     // Update is called once per frame
@@ -55,6 +58,17 @@ public class EndGameManager : MonoBehaviour
     {
         this.team = team;
         Debug.Log($"This player come from {team}");
+
+        if (team == "Virus")
+        {
+            CanvasEndGame = VrPlayer.transform.Find("CanvasEndGame").gameObject;
+            GameObject BackGroundGo = CanvasEndGame.transform.Find("BackGroundImage").gameObject;
+            BackGroundImage = BackGroundGo.GetComponent<Image>();
+            EndGameText = BackGroundGo.transform.Find("VictoryText").gameObject.GetComponent<Text>();
+            TypeOfVictoryText = BackGroundGo.transform.Find("TypeOfVictoryText").gameObject.GetComponent<Text>();
+            TextTimer = BackGroundGo.transform.Find("TextTimer").gameObject.GetComponent<Text>();
+            EndGameImage = BackGroundGo.transform.Find("ImageStatus").gameObject.GetComponent<Image>();
+        }
     }
 
     public void playerDie(string team)
@@ -120,7 +134,7 @@ public class EndGameManager : MonoBehaviour
         //AudioListener.pause = true;
         if (this.team == team)
         {
-            //Debug.Log(Resources.Load<Sprite>("Assets/VR-Vs-KMS/Textures/Victory"));
+
             EndGameImage.sprite = EndGameImageVictory;
             BackGroundImage.color = victoryColor;
             EndGameText.text = "You have won, congratulations";
