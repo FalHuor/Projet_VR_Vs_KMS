@@ -16,6 +16,7 @@ public class EndGameManager : MonoBehaviour
     private string team;
     public Text EndGameText;
     public Text TypeOfVictoryText;
+    public Text TextTimer;
     public Image BackGroundImage;
     public Image EndGameImage;
     public GameObject CanvasEndGame;
@@ -23,8 +24,13 @@ public class EndGameManager : MonoBehaviour
     public Sprite EndGameImageVictory;
     public Sprite EndGameImageDefeat;
 
-    private Color victoryColor = new Color32(50, 150, 255, 200);
-    private Color defeatColor = new Color32(255, 50, 50, 200);
+    public AudioSource WinAudio;
+    public AudioSource LooseAudio;
+
+    public int TimeBeforeReplay;
+
+    private Color victoryColor = new Color32(50, 150, 255, 230);
+    private Color defeatColor = new Color32(255, 50, 50, 230);
 
     // Start is called before the first frame update
     void Start()
@@ -111,6 +117,7 @@ public class EndGameManager : MonoBehaviour
     {
         Debug.Log($"{team} win the game with Contamination Area");
         CanvasEndGame.SetActive(true);
+        //AudioListener.pause = true;
         if (this.team == team)
         {
             //Debug.Log(Resources.Load<Sprite>("Assets/VR-Vs-KMS/Textures/Victory"));
@@ -118,6 +125,7 @@ public class EndGameManager : MonoBehaviour
             BackGroundImage.color = victoryColor;
             EndGameText.text = "You have won, congratulations";
             TypeOfVictoryText.text = typeOfVictory;
+            WinAudio.Play();
         } 
         else
         {
@@ -125,7 +133,26 @@ public class EndGameManager : MonoBehaviour
             BackGroundImage.color = defeatColor;
             EndGameText.text = "You have Loose ... Too bad ... try again";
             TypeOfVictoryText.text = typeOfVictory;
+            LooseAudio.Play();
         }
+        Time.timeScale = 0;
+        StartCoroutine(WaitSomeSecond(TimeBeforeReplay));
+        //AudioListener
+    }
 
+    public void ResetGame()
+    {
+        Debug.Log("GAME RESET");
+    }
+
+    IEnumerator WaitSomeSecond(int timer)
+    {
+        for (int i = timer; i > 0; i--)
+        {
+            TextTimer.text = $"Next Game Start in {i} s";
+            yield return new WaitForSecondsRealtime(1);
+        }
+        TextTimer.text = $"Next Game Start in 0 s";
+        ResetGame();
     }
 }
