@@ -13,6 +13,8 @@ public class ControllerInput : MonoBehaviour
     public GameObject virus;
     public GameObject virusCamera;
 
+    private bool canTeleport = true;
+
     private void Awake()
     {
         inputSource = GetComponent<SteamVR_Behaviour_Pose>().inputSource;
@@ -29,14 +31,17 @@ public class ControllerInput : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (SteamVR_Actions.default_Teleport.GetStateDown(inputSource))
+        if (canTeleport)
         {
-            TeleportPressed();
-        }
-        if (SteamVR_Actions.default_Teleport.GetStateUp(inputSource))
-        {
-            TeleportReleased();
-        }
+            if (SteamVR_Actions.default_Teleport.GetStateDown(inputSource))
+            {
+                TeleportPressed();
+            }
+            if (SteamVR_Actions.default_Teleport.GetStateUp(inputSource))
+            {
+                TeleportReleased();
+            }
+        }       
     }
 
     private void TeleportPressed()
@@ -51,11 +56,17 @@ public class ControllerInput : MonoBehaviour
         {
             virusCamera.transform.position = controllerPointer.TargetPosition;
             virus.transform.position = controllerPointer.TargetPosition;
+            canTeleport = false;
+            StartCoroutine(TeleportDelay());
         }
         controllerPointer.DesactivatePointer();
         Destroy(controllerPointer);        
     }
 
-    
+    IEnumerator TeleportDelay()
+    {
+        yield return new WaitForSeconds(AppConfig.Inst.DelayTeleport);
+        canTeleport = true;
+    }
 
 }
