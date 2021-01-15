@@ -21,7 +21,7 @@ public class EndGameManager : MonoBehaviour
     public Image EndGameImage;
     public GameObject CanvasEndGame;
 
-    public GameObject VrPlayer;
+    private GameObject player;
 
     public Sprite EndGameImageVictory;
     public Sprite EndGameImageDefeat;
@@ -54,6 +54,11 @@ public class EndGameManager : MonoBehaviour
 
     }
 
+    public void setUserGameObject(GameObject user)
+    {
+        player = user;
+    }
+
     public void setTeam(string team)
     {
         this.team = team;
@@ -61,7 +66,10 @@ public class EndGameManager : MonoBehaviour
 
         if (team == "Virus")
         {
-            CanvasEndGame = VrPlayer.transform.Find("CanvasEndGame").gameObject;
+            Debug.Log(player.name);
+            Debug.Log("On essai de changer les variables");
+            CanvasEndGame = player.transform.Find("UICamera").transform.Find("CanvasEndGame").gameObject;
+            Debug.Log(CanvasEndGame.gameObject.tag);
             GameObject BackGroundGo = CanvasEndGame.transform.Find("BackGroundImage").gameObject;
             BackGroundImage = BackGroundGo.GetComponent<Image>();
             EndGameText = BackGroundGo.transform.Find("VictoryText").gameObject.GetComponent<Text>();
@@ -130,11 +138,12 @@ public class EndGameManager : MonoBehaviour
     private void LauchVictory(string team, string typeOfVictory)
     {
         Debug.Log($"{team} win the game with Contamination Area");
+        Debug.Log(CanvasEndGame.activeInHierarchy);
         CanvasEndGame.SetActive(true);
+        Debug.Log(CanvasEndGame.activeInHierarchy);
         //AudioListener.pause = true;
         if (this.team == team)
         {
-
             EndGameImage.sprite = EndGameImageVictory;
             BackGroundImage.color = victoryColor;
             EndGameText.text = "You have won, congratulations";

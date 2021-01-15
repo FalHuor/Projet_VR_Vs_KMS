@@ -58,11 +58,13 @@ namespace vr_vs_kms
 
         void Awake()
         {
+            endGameManagerScript = GameObject.Find("EndGameManager").GetComponent<EndGameManager>();
             if (photonView.IsMine)
             {
                 Debug.LogFormat("Avatar UserMe created for userId {0}", photonView.ViewID);
                 UserMeInstance = gameObject;
-
+                Debug.Log(UserMeInstance.name);
+                endGameManagerScript.setUserGameObject(UserMeInstance);
             }
         }
 
@@ -73,7 +75,6 @@ namespace vr_vs_kms
             Debug.Log("Delay SHoot : " +AppConfig.Inst.DelayShoot);
             Debug.Log("isLocalPlayer:" + photonView.IsMine);
             Health = AppConfig.Inst.LifeNumber;
-            endGameManagerScript = GameObject.Find("EndGameManager").GetComponent<EndGameManager>();
             updateGoFreeLookCameraRig();
             followLocalPlayer();
             activateLocalPlayer();

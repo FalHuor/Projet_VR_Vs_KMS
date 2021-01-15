@@ -2,7 +2,7 @@
 	"DeviceUsed" : "AUTO",
     "LifeNumber" : 10,
     "DelayShoot" : 1.8,
-    "DelayTeleport" : 5,
+    "DelayTeleport" : 1,
     "ColorShotKMS" : {
 		"r": 1.0,
 		"g": 0.6,
@@ -17,5 +17,5 @@
 	},
     "NbContaminatedPlayerToVictory" : 3,
     "RadiusExplosion" : 3,
-    "TimeToAreaContamination" : 4
+    "TimeToAreaContamination" : 2
 }
