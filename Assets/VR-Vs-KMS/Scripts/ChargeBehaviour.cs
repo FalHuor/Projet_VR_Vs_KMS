@@ -24,17 +24,21 @@ public class ChargeBehaviour : MonoBehaviour
     {
         var hit = collision.gameObject;
         Debug.Log("Snowball hit something:" + hit);
-        UserManager um = hit.GetComponent<UserManager>();
-        if (hit.CompareTag("Virus"))
-            um = hit.GetComponentInParent<UserManager>();
-        else if (hit.CompareTag("Scientist"))
-            um = hit.GetComponent<UserManager>();
-        Debug.Log(um);
-        if (um != null)
+        if (!hit.CompareTag("Shield"))
         {
-            Debug.Log("  It is a player !!");
-            um.HitBySnowball(gameObject.tag);
-        }
+            UserManager um = hit.GetComponent<UserManager>();
+            if (hit.CompareTag("Virus"))
+                um = hit.GetComponentInParent<UserManager>();
+            else if (hit.CompareTag("Scientist"))
+                um = hit.GetComponent<UserManager>();
+            Debug.Log(um);
+            if (um != null)
+            {
+                Debug.Log("  It is a player !!");
+                um.HitBySnowball(gameObject.tag);
+            }
+        }            
+               
         Destroy(gameObject);
     }
 }
