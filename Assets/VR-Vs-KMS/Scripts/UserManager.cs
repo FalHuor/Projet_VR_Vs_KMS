@@ -167,7 +167,7 @@ namespace vr_vs_kms
 
             if(Input.GetButtonDown("Jump") || inputSources.Exists(elt => SteamVR_Actions._default.Fire.GetStateDown(elt)))
             {
-                HitBySnowball("Viral");
+                HitBySnowball("Antiviral");
             }
 
             if(canShoot)
@@ -289,6 +289,7 @@ namespace vr_vs_kms
             spawnPoint = spawnPoints[spawnIndex];
             gameObject.transform.position = spawnPoint.transform.position;
             healthBar.UpdateHealth();
+            photonView.RPC("ReactivateShield", RpcTarget.AllViaServer);
         }
 
         [PunRPC]
