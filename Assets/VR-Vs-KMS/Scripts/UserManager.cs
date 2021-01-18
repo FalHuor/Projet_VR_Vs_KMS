@@ -225,6 +225,8 @@ namespace vr_vs_kms
         [SerializeField] private Material Health2;
         [SerializeField] private Material Health1;
 
+        public GameObject Shield;
+
         private int previousHealth;
         public int Health { get; private set; }
         private HealthBarBehaviour healthBar;
@@ -262,8 +264,21 @@ namespace vr_vs_kms
                 gameObject.transform.position = spawnPoint.transform.position;
                 photonView.RPC("APlayerDie", RpcTarget.AllViaServer, gameObject.tag);
                 healthBar.UpdateHealth();
-                DeathEvent.Invoke();                
+                DeathEvent.Invoke();
+                photonView.RPC("ReactivateShield", RpcTarget.AllViaServer);
+                /*if (Shield != null)
+                {
+                    Shield.SetActive(true);
+                    Shield.transform.localScale = new Vector3(1, 1, 1);
+                }*/
             }
+        }
+
+        [PunRPC]
+        void ReactivateShield()
+        {
+            Shield.SetActive(true);
+            Shield.transform.localScale = new Vector3(1, 1, 1);
         }
 
         public void ResetPlayer()
