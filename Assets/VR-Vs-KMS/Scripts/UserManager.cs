@@ -12,6 +12,7 @@ namespace vr_vs_kms
     public class UserManager : MonoBehaviourPunCallbacks, IPunObservable
     {
 
+        private EndGameManager endGameManagerScript;
         public UnityEvent DeathEvent;
 
         public static GameObject UserMeInstance;
@@ -57,11 +58,13 @@ namespace vr_vs_kms
 
         void Awake()
         {
+            endGameManagerScript = GameObject.Find("EndGameManager").GetComponent<EndGameManager>();
             if (photonView.IsMine)
             {
                 Debug.LogFormat("Avatar UserMe created for userId {0}", photonView.ViewID);
                 UserMeInstance = gameObject;
-
+                Debug.Log(UserMeInstance.name);
+                endGameManagerScript.setUserGameObject(UserMeInstance);
             }
         }
 
@@ -78,16 +81,18 @@ namespace vr_vs_kms
             spawnPoints.AddRange(GameObject.FindGameObjectsWithTag("Respawn"));
             audioSources[2].Play();
             //UpdateHealthMaterial();
-            if(gameObject.CompareTag("Virus"))
+            if (gameObject.CompareTag("Virus") && photonView.IsMine)
             {
+                endGameManagerScript.setTeam(gameObject.tag);
                 healthBar = gameObject.GetComponentInChildren<HealthBarBehaviour>();
                 healthBar.Player = gameObject.GetComponent<UserManager>();
                 foreach (SteamVR_Behaviour_Pose pose in GetComponentsInChildren<SteamVR_Behaviour_Pose>())
                 {
                     inputSources.Add(pose.inputSource);
                 }
-            } else if (gameObject.CompareTag("Scientist"))
+            } else if (gameObject.CompareTag("Scientist") && photonView.IsMine)
             {
+                endGameManagerScript.setTeam(gameObject.tag);
                 healthBar = GameObject.Find("HealthBar").GetComponentInChildren<HealthBarBehaviour>();
                 healthBar.Player = gameObject.GetComponent<UserManager>();
                 healthBar.UpdateHealth();
@@ -160,10 +165,10 @@ namespace vr_vs_kms
             // Don't do anything if we are not the UserMe isLocalPlayer
             if (!photonView.IsMine) return;
 
-            /*if(Input.GetButtonDown("Jump") || inputSources.Exists(elt => SteamVR_Actions._default.Fire.GetStateDown(elt)))
+            if(Input.GetButtonDown("Jump") || inputSources.Exists(elt => SteamVR_Actions._default.Fire.GetStateDown(elt)))
             {
                 HitBySnowball("Viral");
-            }*/
+            }
 
             if(canShoot)
             {
@@ -255,9 +260,26 @@ namespace vr_vs_kms
                 int spawnIndex = Random.Range(0, spawnPoints.Count);
                 spawnPoint = spawnPoints[spawnIndex];
                 gameObject.transform.position = spawnPoint.transform.position;
+                photonView.RPC("APlayerDie", RpcTarget.AllViaServer, gameObject.tag);
                 healthBar.UpdateHealth();
                 DeathEvent.Invoke();                
             }
+        }
+
+        public void ResetPlayer()
+        {
+            Health = AppConfig.Inst.LifeNumber;
+            GameObject spawnPoint;
+            int spawnIndex = Random.Range(0, spawnPoints.Count);
+            spawnPoint = spawnPoints[spawnIndex];
+            gameObject.transform.position = spawnPoint.transform.position;
+            healthBar.UpdateHealth();
+        }
+
+        [PunRPC]
+        public void APlayerDie(string team)
+        {
+            endGameManagerScript.playerDie(team);
         }
 
         /*public void UpdateHealthMaterial()
