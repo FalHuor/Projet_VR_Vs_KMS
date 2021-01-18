@@ -266,6 +266,16 @@ namespace vr_vs_kms
             }
         }
 
+        public void ResetPlayer()
+        {
+            Health = AppConfig.Inst.LifeNumber;
+            GameObject spawnPoint;
+            int spawnIndex = Random.Range(0, spawnPoints.Count);
+            spawnPoint = spawnPoints[spawnIndex];
+            gameObject.transform.position = spawnPoint.transform.position;
+            healthBar.UpdateHealth();
+        }
+
         [PunRPC]
         public void APlayerDie(string team)
         {

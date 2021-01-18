@@ -82,6 +82,16 @@ namespace vr_vs_kms
             }
         }
 
+        public void resetArea()
+        {
+            listPlayerInZone = new List<GameObject>();
+            canCaptured = true;
+            isOnCaptured = false;
+            onCaptureBy = "";
+            CapturedBy = "";
+            BelongsToNobody();
+        }
+
         private void CheckPlayerOnZone()
         {
             if (listPlayerInZone.Count > 1)

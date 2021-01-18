@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using vr_vs_kms;
 
 public class EndGameManager : MonoBehaviour
 {
@@ -108,11 +109,11 @@ public class EndGameManager : MonoBehaviour
         int NeutralArea = 0;
         foreach (GameObject Area in contaminationAreas)
         {
-            if (Area.GetComponent<vr_vs_kms.ContaminationArea>().CapturedBy == "Scientist")
+            if (Area.GetComponent<ContaminationArea>().CapturedBy == "Scientist")
             {
                 ScientistContaminationArea += 1;
             }
-            else if (Area.GetComponent<vr_vs_kms.ContaminationArea>().CapturedBy == "Virus")
+            else if (Area.GetComponent<ContaminationArea>().CapturedBy == "Virus")
             {
                 VirusContaminationArea += 1;
             }
@@ -146,7 +147,7 @@ public class EndGameManager : MonoBehaviour
         {
             EndGameImage.sprite = EndGameImageVictory;
             BackGroundImage.color = victoryColor;
-            EndGameText.text = "You have won, congratulations";
+            EndGameText.text = "You won, congratulations";
             TypeOfVictoryText.text = typeOfVictory;
             WinAudio.Play();
         } 
@@ -154,7 +155,7 @@ public class EndGameManager : MonoBehaviour
         {
             EndGameImage.sprite = EndGameImageDefeat;
             BackGroundImage.color = defeatColor;
-            EndGameText.text = "You have Loose ... Too bad ... try again";
+            EndGameText.text = "You Lost ... Too bad ... try again";
             TypeOfVictoryText.text = typeOfVictory;
             LooseAudio.Play();
         }
@@ -166,16 +167,34 @@ public class EndGameManager : MonoBehaviour
     public void ResetGame()
     {
         Debug.Log("GAME RESET");
+        ScoreVirusTeam = 0;
+        ScoreScientistTeam = 0;
+
+        player.GetComponent<UserManager>().ResetPlayer();
+
+        foreach (GameObject Area in contaminationAreas)
+        {
+            Area.GetComponent<ContaminationArea>().resetArea();
+        }
+
+        CanvasEndGame.SetActive(false);
+        Time.timeScale = 1;
     }
 
     IEnumerator WaitSomeSecond(int timer)
     {
+        TextTimer.text = "";
+        yield return new WaitForSecondsRealtime(5);
+
         for (int i = timer; i > 0; i--)
         {
             TextTimer.text = $"Next Game Start in {i} s";
             yield return new WaitForSecondsRealtime(1);
         }
         TextTimer.text = $"Next Game Start in 0 s";
+        yield return new WaitForSecondsRealtime(1);
         ResetGame();
     }
+
+
 }
