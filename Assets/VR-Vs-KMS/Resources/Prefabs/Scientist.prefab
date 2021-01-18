@@ -1663,6 +1663,7 @@ MonoBehaviour:
   Health2: {fileID: 0}
   Health1: {fileID: 0}
   Shield: {fileID: 0}
+  healthBar: {fileID: 0}
   ForceHit: 50
 --- !u!82 &1173797483039049134
 AudioSource:

@@ -228,8 +228,8 @@ namespace vr_vs_kms
         public GameObject Shield;
 
         private int previousHealth;
-        public int Health { get; private set; }
-        private HealthBarBehaviour healthBar;
+        public int Health { get; set; }
+        public HealthBarBehaviour healthBar;
         /// <summary>
         /// The Transform from which the snow ball is spawned
         /// </summary>
