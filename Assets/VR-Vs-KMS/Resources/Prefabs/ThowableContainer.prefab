@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 8192414757557222925}
   - component: {fileID: 1980014544524308659}
   - component: {fileID: 4108376808926141652}
+  - component: {fileID: 6949237010595583252}
   m_Layer: 0
   m_Name: ThowableContainer
   m_TagString: Untagged
@@ -93,6 +94,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 6887824009342229264}
+  - {fileID: 6949237010595583252}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -212,7 +214,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8086416451831258445}
-        m_MethodName: UpdateArmed
+        m_MethodName: set_Armed
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -223,7 +225,7 @@ MonoBehaviour:
           m_BoolArgument: 1
         m_CallState: 2
       - m_Target: {fileID: 8086416451831258445}
-        m_MethodName: UpdateGrabbed
+        m_MethodName: set_IsGrabbed
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -237,7 +239,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8086416451831258445}
-        m_MethodName: UpdateGrabbed
+        m_MethodName: set_IsGrabbed
         m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -315,8 +317,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c2805af49d7275439ddfdab0fa5a54d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Armed: 0
-  IsGrabbed: 0
 --- !u!82 &8178684800231971748
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5231,6 +5231,22 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!114 &6949237010595583252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7754599587344641438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 1
+  m_TeleportEnabled: 0
+  m_TeleportIfDistanceGreaterThan: 1
 --- !u!1001 &6351692841490225027
 PrefabInstance:
   m_ObjectHideFlags: 0

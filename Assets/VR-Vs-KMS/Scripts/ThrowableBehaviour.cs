@@ -6,8 +6,8 @@ using vr_vs_kms;
 
 public class ThrowableBehaviour : MonoBehaviourPunCallbacks
 {
-    public bool Armed = false;
-    public bool IsGrabbed = false;
+    public bool Armed { get; set; } = false;
+    public bool IsGrabbed { get; set; } = false;
     AudioSource[] audioSources;
     ParticleSystem particleSystem;
 
@@ -41,7 +41,7 @@ public class ThrowableBehaviour : MonoBehaviourPunCallbacks
         }
         
     }
-
+    /*
     public void UpdateArmed(bool boolean)
     {
         photonView.RPC("SetArmed", RpcTarget.AllViaServer, boolean);
@@ -62,36 +62,36 @@ public class ThrowableBehaviour : MonoBehaviourPunCallbacks
     public void SetGrabbed(bool boolean)
     {
         IsGrabbed = boolean;
-    }
+    }*/
 
     [PunRPC]
     void ExplosionDamage()
     {
         Armed = false;
         IsGrabbed = false;
-        Debug.Log("(explosionDamage) Armed : " + Armed);
-        Debug.Log("(explosionDamage) IsGrabbed : " + IsGrabbed);
         Collider[] hitColliders = Physics.OverlapSphere(gameObject.transform.position, AppConfig.Inst.RadiusExplosion);
         audioSources[0].Play();
         particleSystem.Play();
         //AudioSource.PlayClipAtPoint(audioSources[0], gameObject.transform.position);
+        Debug.Log("Length : " + hitColliders.Length);
         foreach (var hitCollider in hitColliders)
         {
+            Debug.Log("Name : " + hitCollider.name);
             if (hitCollider.CompareTag("Scientist"))
             {
-                hitCollider.GetComponent<UserManager>().Health--;
-                audioSources[1].Play();
-                hitCollider.GetComponent<UserManager>().healthBar.UpdateHealth();
+                hitCollider.GetComponent<UserManager>().HitBySnowball("Viral");
+                /*audioSources[1].Play();
+                hitCollider.GetComponent<UserManager>().healthBar.UpdateHealth();*/
             }
             else if (hitCollider.CompareTag("Virus"))
             {
-                hitCollider.GetComponentInParent<UserManager>().Health--;
-                audioSources[1].Play();
-                hitCollider.GetComponentInParent<UserManager>().healthBar.UpdateHealth();
+                hitCollider.GetComponentInParent<UserManager>().HitBySnowball("Antiviral");
+                /*audioSources[1].Play();
+                hitCollider.GetComponentInParent<UserManager>().healthBar.UpdateHealth();*/
             }
         }
 
-        Destroy(gameObject, 4.102f);
+        Destroy(gameObject, 4);
 
     }
 }
