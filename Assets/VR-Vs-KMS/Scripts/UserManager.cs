@@ -165,10 +165,10 @@ namespace vr_vs_kms
             // Don't do anything if we are not the UserMe isLocalPlayer
             if (!photonView.IsMine) return;
 
-            if(Input.GetButtonDown("Jump") || inputSources.Exists(elt => SteamVR_Actions._default.Fire.GetStateDown(elt)))
+            /*if(Input.GetButtonDown("Jump") || inputSources.Exists(elt => SteamVR_Actions._default.Fire.GetStateDown(elt)))
             {
                 HitBySnowball("Antiviral");
-            }
+            }*/
 
             if(canShoot)
             {
